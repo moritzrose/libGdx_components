@@ -21,8 +21,10 @@ This implementation is split into two parts:
 To process input via keyboard, mouse or touch, we need a class that implements the methods from the InputProcessor interface.
 We can make our life easier by extending the InputAdapter, which is simply an implementation of that interface, which returns false for every method.
 This way, we only need to override the methods we need.
+
 So lets create a new class - I called mine CameraController. We are also going to need a constructor where we pass in the camera, since we are going to manipulate its parameters.
-Lastly, we are going to add a method called uodate() where we update the camera, after processing the input.
+
+Lastly, we are going to add a method called update() where we update the camera, after processing the input.
 
 ```java
 public class CameraController extends InputAdapter {
