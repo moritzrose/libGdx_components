@@ -11,7 +11,7 @@ What I wish I had, was a collection of components, that could be implemented ind
 Of course, knowing how to structure your game, how and where to clear a frame buffer, caring about resource management and so on and so forth - all these topics are very important as well. 
 In my opinion though, it is simply way to much to handle and also stay motivated.
 
-After a lot of research and trial and error, I managed to come up with an implementation of my first 3D Camera Controller. I was proud and also confident to learn more concepts! This is when I though, this needs to be accessible to everybody! 
+After a lot of research and trial and error, I managed to come up with an implementation of my first 3D Camera Controller. I was proud and also confident to learn more concepts! This is when I thought, this needs to be accessible to everybody! 
 Me personally, I learn the best, when I read explanations and follow code snippets, instead of following a video. There might be others out there, this is just how it is for me! There is definitely no better oder worse!
 
 This is how this collection was born and will hopefully grow with my journey in libGDX. If you came here and think, why is there only one chapter - chances are high, I just made this page - I had to start somewhere. I would be all the more grateful for suggestion on what should become part of this collection in the future!
