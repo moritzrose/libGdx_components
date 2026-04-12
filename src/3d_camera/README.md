@@ -21,7 +21,7 @@ This way, we only need to override the methods we need.
 So lets create a new class - I called mine CameraController. We are also going to need a constructor where we pass in the camera, since we are going to manipulate its parameters.
 Lastly, we are going to add a method called uodate() where we update the camera, after processing the input.
 
-````java
+```java
 public class CameraController extends InputAdapter {
 
     public CameraController(Camera camera) {
