@@ -2,7 +2,7 @@ Hello and welcome to this collection!
 
 This list of components is still a work in progress - definitely let me know if you have ideas for improvement or spot some mistakes! I am happy to learn.
 
-<h3>So why am I doing this?</h3>
+<h3>What is this for?</h3>
 
 When I started with libGDX I found that a lot of tutorials where part of a full series like "Make a full 3d game in libGDX". If I wanted to understand everything, I would have to go through every single episode and follow how to make a game, that I did not want to make in the first place.
 What I wish I had, was a collection of components, that could be implemented independently with an easy to understand explanation so that I could choose, what I wanted next, for my project.
