@@ -10,10 +10,13 @@
 <h3>Implementation:</h3>
 
 This implementation is split into two parts:
-    <ol>
-    <li> Change the camera's parameters like: position, distance to center, pitch and yaw
-    <li> Update the camera's position and orientation based on the previously modified parameters
-    </ol>
+   
+<ol>
+<li>Change the camera's parameters like: position, distance to center, pitch and yaw</li>
+<li>Update the camera's position and orientation based on the previously modified parameters</li>
+</ol>
+
+    
 
 To process input via keyboard, mouse or touch, we need a class that implements the methods from the InputProcessor interface.
 We can make our life easier by extending the InputAdapter, which is simply an implementation of that interface, which returns false for every method.
