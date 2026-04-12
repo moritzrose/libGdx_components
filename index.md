@@ -19,6 +19,7 @@ Me personally, I learn the best, when I read explanations and follow code snippe
 This is how this collection was born and will hopefully grow with my journey in libGDX. 
 If you came here and think, why is there only one chapter - chances are high, I just made this page - I had to start somewhere. 
 I would be all the more grateful for suggestions on what should become part of this collection in the future!
+
 Feel free to open a new discussion [here](https://github.com/morigamio/libGdx_components/discussions), where you briefly describe your idea or maybe even have some code ready!
 
 <h3> List of components </h3>
