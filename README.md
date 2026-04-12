@@ -1,2 +1,1 @@
-# libGdx_components
 
