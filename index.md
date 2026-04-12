@@ -6,6 +6,7 @@ This list of components is still a work in progress - definitely let me know if 
 
 When I started with libGDX I found that a lot of tutorials where part of a full series like "Make a full 3d game in libGDX". If I wanted to understand everything, I would have to go through every single episode and follow how to make a game, that I did not want to make in the first place.
 What I wish I had, was a collection of components, that could be implemented independently with an easy to understand explanation so that I could choose, what I wanted next, for my project.
+
 Of course, knowing how to structure your game, how and where to clear a frame buffer, caring about resource management and so on and so forth - all these topics are very important as well. 
 In my opinion though, it is simply way to much to handle and also stay motivated.
 
