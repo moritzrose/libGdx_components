@@ -9,7 +9,7 @@
 
 <h3>Implementation:</h3>
 
-This implementation is split into to logical parts:
+This implementation is split into two parts:
     <ol>
     <li> Change the camera's parameters like: position, distance to center, pitch and yaw
     <li> Update the camera's position and orientation based on the previously modified parameters
