@@ -28,10 +28,6 @@ public class CameraController extends InputAdapter {
         this(camera);
     }
 
-    public CameraController(Camera camera, Vector3 startPos) {
-        this.camera = camera;
-    }
-
     @Override
     public boolean keyDown(int keycode) {
         return true;
