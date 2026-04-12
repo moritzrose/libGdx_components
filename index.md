@@ -1,4 +1,4 @@
-Hello and welcome to this my collection!
+Hello and welcome to this collection!
 
 This list of components is still a work in progress - definitely let me know if you have ideas for improvement or spot some mistakes! I am happy to learn.
 
