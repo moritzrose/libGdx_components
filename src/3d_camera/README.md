@@ -157,9 +157,12 @@ We also return true to signal, that the input was processed.
 ```
 
 <h3>Zoom</h3>
-
+coming soon
 <h3>Rotation</h3>
+coming soon
 <h3>update()</h3>
+coming soon
+
 <h3>Settings</h3>
 Using radians for angles is more appropriate here, since trigonometric functions (sin, cos) in most libraries expect radians by default. While you can use degrees, you’d need to manually convert them to radians first—which adds unnecessary complexity.
 
