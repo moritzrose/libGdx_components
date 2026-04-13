@@ -1,15 +1,15 @@
 [← Back to main](https://morigamio.github.io/libGdx_components/)
 
-<h2>3D Game Camera</h2>
+<h1>3D Game Camera</h1>
 
-<h3>Features:</h3>
+<h2>Features:</h2>
   - move the camera with WASD
   - rotate and tilt the camera around a center with middle mouse button
   - zoom in and zoom out with scroll wheel
   - smooth movement
   - rotation speed, scroll speed, zoom speed and min max values for angles or distances are customizable in a settings class
 
-<h3>Implementation:</h3>
+<h2>Implementation:</h2>
 
 This implementation is split into two parts:
    
@@ -73,7 +73,7 @@ public class CameraController extends InputAdapter {
     }
 }
 ```
-<h4>Instance Variables</h4>
+<h3>Instance Variables</h3>
 As said above, we need to change the cameras parameters. We will store those in instance variables.
 If you are not familiar with certain words, I would suggest googling them - they should not be to hard to understand.
 ```java
@@ -107,7 +107,7 @@ The IntIntMap might be new to you. It basically works like a normal java map wit
 Lastly, we are going to initiate three temporary vectors - I usually add them as I go and ended up with three in this implementation. 
 I like having "containers" ready to fill whenever I need to without having to initialize new vectors all over the place. Give our garbage collector a break!
 
-<h4>Constructor</h4>
+<h3>Constructor</h3>
 
 We will initialize our camera parameters with start values. To keep everything nice and clean, I like to store those in a constance class 'Settings'. Feel free to adjust them to your needs.
 
@@ -135,8 +135,8 @@ public CameraController(Camera camera, Vector3 startPos) {
 ```
 
 
-<h4>WASD Input</h4>
+<h3>WASD Input</h3>
 
 
-<h4>Zoom</h4>
-<h4>Rotation</h4>
+<h3>Zoom</h3>
+<h3>Rotation</h3>
