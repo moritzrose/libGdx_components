@@ -119,7 +119,7 @@ We are also adding a second constructor - this is just convenience to be able to
 After setting these parameters, we need to call update() to calculate our cameras initial position and direction.
 It’s important to use delta time here; otherwise, your camera’s movement will depend on the computer’s processing power—leading to inconsistent behavior across different systems, which is not what you want.
 ```java
-  public CameraController(Camera camera) {
+public CameraController(Camera camera) {
     this(camera, Settings.CAM_START_POS);
 }
 
