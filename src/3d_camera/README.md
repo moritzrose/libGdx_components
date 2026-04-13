@@ -73,5 +73,43 @@ public class CameraController extends InputAdapter {
     }
 }
 ```
+<h4>Instance Variables</h4>
+As said above, we need to change the cameras parameters. We will store those in instance variables.
+If you do not know exactly what certain words mean, I would suggest googling them - they should not be to complex to understand.
+```java
+public class CameraController extends InputAdapter {
 
-to be continued soon
+    private final Camera camera;
+
+    private float pitch;
+    private float yaw;
+    private float distanceToCenter;
+    private final Vector3 rotationCenter;
+
+    private boolean middleMouseButtonPressed;
+    private boolean leftMouseButtonPressed;
+    private boolean rightMouseButtonPressed;
+    private final IntIntMap pressedKeys = new IntIntMap();
+
+    // convenience to store tmp values instead of initializing new vectors everywhere
+    private final Vector3 tmp1 = new Vector3();
+    private final Vector3 tmp2 = new Vector3();
+    private final Vector3 tmp3 = new Vector3();
+
+    // constructor + rest of the class
+```
+We start with variables for the pitch, the yaw, the distance to the rotation center and a vector for the position of the rotation center itself.
+
+We also need a boolean to store, if the middle mouse button was pressed and a so called IntIntMap, where we store the keys, that were pressed in this loop.
+
+The IntIntMap might be new to you, it basically works like a normal java map with int keys and int values, but was optimized concerning resource management and efficiency. Feel free to dive deeper into that topic!
+
+Lastly, we are going to initiate three temporary vectors - I basically added them as I go and ended up with three in this implementation. 
+I like having "containers" ready to fill whenever I need to without having to initialize new vectors all over the place. Give our garbage collector a break!
+
+
+<h4>WASD Input</h4>
+
+
+<h4>Zoom</h4>
+<h4>Rotation</h4>
