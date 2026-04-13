@@ -14,7 +14,7 @@
 This implementation is split into two parts:
    
 <ol>
-<li>Change the camera's parameters like: position, distance to center, pitch and yaw</li>
+<li>Change the camera's parameters like position, distance to center, pitch and yaw</li>
 <li>Update the camera's position and orientation based on the previously modified parameters</li>
 </ol>
 
