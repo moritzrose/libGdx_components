@@ -75,7 +75,7 @@ public class CameraController extends InputAdapter {
 ```
 <h4>Instance Variables</h4>
 As said above, we need to change the cameras parameters. We will store those in instance variables.
-If you do not know exactly what certain words mean, I would suggest googling them - they should not be to complex to understand.
+If you are not familiar with certain words, I would suggest googling them - they should not be to hard to understand.
 ```java
 public class CameraController extends InputAdapter {
 
@@ -87,8 +87,6 @@ public class CameraController extends InputAdapter {
     private final Vector3 rotationCenter;
 
     private boolean middleMouseButtonPressed;
-    private boolean leftMouseButtonPressed;
-    private boolean rightMouseButtonPressed;
     private final IntIntMap pressedKeys = new IntIntMap();
 
     // convenience to store tmp values instead of initializing new vectors everywhere
@@ -97,15 +95,44 @@ public class CameraController extends InputAdapter {
     private final Vector3 tmp3 = new Vector3();
 
     // constructor + rest of the class
+    // ...
+}
 ```
 We start with variables for the pitch, the yaw, the distance to the rotation center and a vector for the position of the rotation center itself.
 
 We also need a boolean to store, if the middle mouse button was pressed and a so called IntIntMap, where we store the keys, that were pressed in this loop.
 
-The IntIntMap might be new to you, it basically works like a normal java map with int keys and int values, but was optimized concerning resource management and efficiency. Feel free to dive deeper into that topic!
+The IntIntMap might be new to you. It basically works like a normal java map with int keys and int values, but was optimized concerning resource management and efficiency. Feel free to dive deeper into that topic!
 
-Lastly, we are going to initiate three temporary vectors - I basically added them as I go and ended up with three in this implementation. 
+Lastly, we are going to initiate three temporary vectors - I usually add them as I go and ended up with three in this implementation. 
 I like having "containers" ready to fill whenever I need to without having to initialize new vectors all over the place. Give our garbage collector a break!
+
+<h4>Constructor</h4>
+
+We will initialize our camera parameters with start values. To keep everything nice and clean, I like to store those in a constance class 'Settings'. Feel free to adjust them to your needs.
+
+We are also adding a second constructor - this is just convenience to be able to set a start position. 
+
+After setting these parameters, we need to call update() to calculate our cameras initial position and direction.
+It’s important to use delta time here; otherwise, your camera’s movement will depend on the computer’s processing power—leading to inconsistent behavior across different systems, which is not what you want.
+```java
+  public CameraController(Camera camera) {
+    this(camera, Settings.CAM_START_POS);
+}
+
+public CameraController(Camera camera, Vector3 startPos) {
+    this.camera = camera;
+
+    // set initial values
+    this.rotationCenter = startPos;
+    this.distanceToCenter = Settings.CAM_START_DISTANCE;
+    this.yaw = Settings.CAM_START_YAW;
+    this.pitch = Settings.CAM_START_PITCH;
+
+    // calculate cameras initial position and direction according to initial centerPos, distance, yaw and pitch
+    update(Gdx.graphics.getDeltaTime());
+}
+```
 
 
 <h4>WASD Input</h4>
