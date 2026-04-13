@@ -140,8 +140,24 @@ public CameraController(Camera camera, Vector3 startPos) {
 
 <h3>WASD Input</h3>
 
+These two methods are pretty straight forward. Whenever a key is pressed, we store the corresponding keycode in pressedKeys. When we release the key, we remove it. 
+We also return true to signal, that the input was processed.
+```java
+    @Override
+    public boolean keyDown(int keycode) {
+        pressedKeys.put(keycode, keycode);
+        return true;
+    }
+
+    @Override
+    public boolean keyUp(int keycode) {
+        pressedKeys.remove(keycode, 0);
+        return true;
+    }
+```
 
 <h3>Zoom</h3>
+
 <h3>Rotation</h3>
 <h3>update()</h3>
 <h3>Settings</h3>
