@@ -107,9 +107,12 @@ The IntIntMap might be new to you. It basically works like a normal java map wit
 Lastly, we are going to initiate three temporary vectors - I usually add them as I go and ended up with three in this implementation. 
 I like having "containers" ready to fill whenever I need to without having to initialize new vectors all over the place. Give our garbage collector a break!
 
-<h3>Constructor</h3>
+<h3>Constructors</h3>
 
-We will initialize our camera parameters with start values. To keep everything nice and clean, I like to store those in a constance class 'Settings'. Feel free to adjust them to your needs.
+We will initialize our camera parameters with start values. 
+
+To keep everything nice and clean, I like to store those in a constance class 'Settings'. Feel free to adjust them to your needs.
+You can find the class at the end of the page.
 
 We are also adding a second constructor - this is just convenience to be able to set a start position. 
 
@@ -140,3 +143,26 @@ public CameraController(Camera camera, Vector3 startPos) {
 
 <h3>Zoom</h3>
 <h3>Rotation</h3>
+<h3>update()</h3>
+<h3>Settings</h3>
+Using radians for angles is more appropriate here, since trigonometric functions (sin, cos) in most libraries expect radians by default. While you can use degrees, you’d need to manually convert them to radians first—which adds unnecessary complexity.
+
+These values are the result of experimentation and trial and error. Feel free to tweak them to better suit your specific needs.
+```java
+public class Settings {
+
+    // camera
+    public static final Vector3 CAM_START_POS = new Vector3(0, 0, 0);
+    public static final float CAM_START_DISTANCE = 25f;
+    public static final float CAM_MIN_DISTANCE = 5f;
+    public static final float CAM_MAX_DISTANCE = 50f;
+    public static final float CAM_START_YAW = (float) (0 * PI);
+    public static final float CAM_START_PITCH = (float) (PI / 10);
+    public static final float CAM_MIN_PITCH = (float) (0.1 * PI / 2);
+    public static final float CAM_MAX_PITCH = (float) (0.6 * PI / 2);
+    public static final float CAM_ROTATION_SPEED = (float) (PI / 1650);
+    public static final float CAM_SCROLL_SPEED = 15f;
+    public static final float CAM_ZOOM_SPEED = 2.5f;
+    public static final float CAM_LERP_FACTOR = 0.17f;
+}
+```
