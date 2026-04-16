@@ -322,6 +322,6 @@ public class Settings {
     public static final float CAM_ROTATION_SPEED = (float) (PI / 1650);
     public static final float CAM_SCROLL_SPEED = 15f;
     public static final float CAM_ZOOM_SPEED = 2.5f;
-    public static final float CAM_LERP_FACTOR = 0.17f;
+    public static final float CAM_LERP_FACTOR = 11.6f;
 }
 ```
