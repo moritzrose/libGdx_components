@@ -116,8 +116,16 @@ You can find the class at the end of the page.
 
 We are also adding a second constructor - this is just convenience to be able to set a start position. 
 
-After setting these parameters, we need to call update() to calculate our cameras initial position and direction.
-It’s important to use delta time here; otherwise, your camera’s movement will depend on the computer’s processing power—leading to inconsistent behavior across different systems, which is not what you want.
+After setting these parameters, we need to place the camera at its correct initial position.
+You might be tempted to just call `update()` here — but `update()` uses lerping to smoothly move the camera over time. On the very first frame there is no previous position to lerp from, which can leave the view matrix in an invalid state.
+Instead, we calculate the position directly and snap the camera there right away.
+
+The position is derived from spherical coordinates: given a center point, a distance, a yaw (horizontal angle) and a pitch (vertical angle), we get:
+```
+x = center.x + distance * cos(pitch) * sin(yaw)
+y = center.y + distance * sin(pitch)
+z = center.z + distance * cos(pitch) * cos(yaw)
+```
 ```java
 public CameraController(Camera camera) {
     this(camera, Settings.CAM_START_POS);
@@ -132,8 +140,14 @@ public CameraController(Camera camera, Vector3 startPos) {
     this.yaw = Settings.CAM_START_YAW;
     this.pitch = Settings.CAM_START_PITCH;
 
-    // calculate cameras initial position and direction according to initial centerPos, distance, yaw and pitch
-    update(Gdx.graphics.getDeltaTime());
+    // snap camera directly to its target so the first frame has a valid (invertible) view matrix
+    camera.position.set(
+            rotationCenter.x + distanceToCenter * (float) (Math.cos(pitch) * Math.sin(yaw)),
+            rotationCenter.y + distanceToCenter * (float) Math.sin(pitch),
+            rotationCenter.z + distanceToCenter * (float) (Math.cos(pitch) * Math.cos(yaw))
+    );
+    camera.direction.set(rotationCenter).sub(camera.position).nor();
+    camera.update(true);
 }
 ```
 
@@ -157,11 +171,137 @@ We also return true to signal, that the input was processed.
 ```
 
 <h3>Zoom</h3>
-coming soon
+
+Zooming is the simplest part — we just adjust the distance to the rotation center when the scroll wheel moves.
+`amountY` is positive when scrolling down (zoom out) and negative when scrolling up (zoom in). We then clamp the result so the camera can never get too close or clip through the scene.
+
+```java
+@Override
+public boolean scrolled(float amountX, float amountY) {
+    distanceToCenter += amountY * Settings.CAM_ZOOM_SPEED;
+    distanceToCenter = Math.clamp(distanceToCenter, Settings.CAM_MIN_DISTANCE, Settings.CAM_MAX_DISTANCE);
+    return true;
+}
+```
+
 <h3>Rotation</h3>
-coming soon
+
+Rotation works in three steps: detect when the middle mouse button is pressed, track its state, and use the mouse delta to update yaw and pitch while it is held.
+
+When the middle button goes down, we catch the cursor so it can't leave the window while rotating. On release, we free it again.
+
+```java
+@Override
+public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+    if (button == Input.Buttons.MIDDLE) {
+        middleMouseButtonPressed = true;
+        Gdx.input.setCursorCatched(true);
+        return true;
+    }
+    return false;
+}
+
+@Override
+public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+    if (button == Input.Buttons.MIDDLE) {
+        middleMouseButtonPressed = false;
+        Gdx.input.setCursorCatched(false);
+        return true;
+    }
+    return false;
+}
+```
+
+While dragging, we read the mouse delta and translate it into changes in yaw and pitch.
+Notice that yaw is clamped to a small step per frame. Since the camera tries to reach target coordinates, allowing huge target vectors would make our camera move closer to  the center, since it tries to take the shortest way. The graph below illustrates that. 
+![huge rotation diff.png](C%3A/Users/morit/IdeaProjects/libGdx_components/src/3d_camera/huge%20rotation%20diff.png)
+Pitch is simply clamped to the configured min/max range so the camera can't flip upside down.
+
+```java
+@Override
+public boolean touchDragged(int screenX, int screenY, int pointer) {
+    if (middleMouseButtonPressed) {
+        float deltaX = Gdx.input.getDeltaX();
+        float deltaY = Gdx.input.getDeltaY();
+
+        // yaw difference
+        float diffYaw = (float) Math.clamp(deltaX * Settings.CAM_ROTATION_SPEED, -0.1, 0.1);
+        this.yaw -= diffYaw;
+        this.yaw %= (float) (2 * PI);
+
+        // pitch difference
+        float diffPitch = deltaY * Settings.CAM_ROTATION_SPEED;
+        this.pitch += diffPitch;
+        this.pitch = Math.clamp(pitch, Settings.CAM_MIN_PITCH, Settings.CAM_MAX_PITCH);
+
+        return true;
+    }
+    return false;
+}
+```
+
 <h3>update()</h3>
-coming soon
+
+`update()` is called once per game loop. It does three things in order: move the rotation center based on held keys, lerp the camera position toward its target based on distance to center, yaw and pitch, then point the camera at the center.
+
+**Moving the rotation center**
+
+We accumulate a movement vector from whichever WASD keys are currently held, normalize it (so diagonal movement is not faster), scale it by speed and delta time, and add it to `rotationCenter`.
+
+The two helper methods `fwdBwdVector` and `sideWaysVector` build direction vectors that are projected onto the horizontal plane (y = 0) so that moving forward never changes the height of the center — regardless of the camera's current pitch.
+
+**Lerping the camera position**
+
+From the current `rotationCenter`, `distanceToCenter`, `yaw` and `pitch` we compute the exact target position using the same spherical coordinate formula as in the constructor. We then lerp the camera toward that target.
+
+It is important to multiply the lerp factor by `deltaTime` here. Without it, the smoothing speed would depend on the frame rate — on a fast machine the camera would feel snappier than on a slow one.
+
+**Pointing at the center**
+
+Finally, we set the camera direction to the vector from its current position to `rotationCenter` and call `camera.update(true)` to apply all changes.
+
+```java
+public void update(float deltaTime) {
+
+    // move rotationCenter
+    tmp3.setZero();
+    float increment = deltaTime * Settings.CAM_SCROLL_SPEED;
+    if (pressedKeys.containsKey(Input.Keys.W)) tmp3.add(fwdBwdVector(1));
+    if (pressedKeys.containsKey(Input.Keys.S)) tmp3.add(fwdBwdVector(-1));
+    if (pressedKeys.containsKey(Input.Keys.A)) tmp3.add(sideWaysVector(-1));
+    if (pressedKeys.containsKey(Input.Keys.D)) tmp3.add(sideWaysVector(1));
+    tmp3.nor().scl(increment);
+    rotationCenter.add(tmp3);
+
+    // calculate cam position to lerp to based on new rotationCenter position
+    float target_x = (float) (rotationCenter.x + distanceToCenter * Math.cos(pitch) * Math.sin(yaw));
+    float target_y = (float) (rotationCenter.y + distanceToCenter * Math.sin(pitch));
+    float target_z = (float) (rotationCenter.z + distanceToCenter * Math.cos(pitch) * Math.cos(yaw));
+    tmp1.set(target_x, target_y, target_z);
+    camera.position.lerp(tmp1, Settings.CAM_LERP_FACTOR * deltaTime);
+
+    // make camera direction point to rotationCenter
+    tmp1.set(rotationCenter).sub(camera.position).nor();
+    this.camera.direction.set(tmp1);
+
+    this.camera.update(true);
+}
+
+private Vector3 fwdBwdVector(int sign) {
+    tmp1.set(camera.direction);
+    tmp1.y = 0;
+    tmp1.nor().scl(sign);
+    return tmp1;
+}
+
+private Vector3 sideWaysVector(int sign) {
+    tmp2.set(camera.direction);
+    tmp2.y = 0;
+    tmp2.nor();
+    tmp1.set(tmp2).crs(camera.up).nor().scl(sign);
+    return tmp1;
+}
+```
 
 <h3>Settings</h3>
 Using radians for angles is more appropriate here, since trigonometric functions (sin, cos) in most libraries expect radians by default. While you can use degrees, you’d need to manually convert them to radians first—which adds unnecessary complexity.

@@ -31,8 +31,6 @@ public class CameraController extends InputAdapter {
     private float pitch;
 
     private boolean middleMouseButtonPressed;
-    private boolean leftMouseButtonPressed;
-    private boolean rightMouseButtonPressed;
     private final IntIntMap pressedKeys = new IntIntMap();
 
     // convenience to store tmp values instead of initializing new vectors everywhere
@@ -53,8 +51,14 @@ public class CameraController extends InputAdapter {
         this.yaw = Settings.CAM_START_YAW;
         this.pitch = Settings.CAM_START_PITCH;
 
-        // calculate cameras initial position and direction according to initial centerPos, distance, yaw and pitch
-        update(Gdx.graphics.getDeltaTime());
+        // snap camera directly to its target so the first frame has a valid (invertible) view matrix
+        camera.position.set(
+                rotationCenter.x + distanceToCenter * (float) (Math.cos(pitch) * Math.sin(yaw)),
+                rotationCenter.y + distanceToCenter * (float) Math.sin(pitch),
+                rotationCenter.z + distanceToCenter * (float) (Math.cos(pitch) * Math.cos(yaw))
+        );
+        camera.direction.set(rotationCenter).sub(camera.position).nor();
+        camera.update(true);
     }
 
     @Override
@@ -71,8 +75,8 @@ public class CameraController extends InputAdapter {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        middleMouseButtonPressed = button == Input.Buttons.MIDDLE;
-        if (middleMouseButtonPressed) {
+        if (button == Input.Buttons.MIDDLE) {
+            middleMouseButtonPressed = true;
             Gdx.input.setCursorCatched(true);
             return true;
         }
@@ -81,8 +85,8 @@ public class CameraController extends InputAdapter {
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        middleMouseButtonPressed = button == Input.Buttons.MIDDLE;
-        if (middleMouseButtonPressed) {
+        if (button == Input.Buttons.MIDDLE) {
+            middleMouseButtonPressed = false;
             Gdx.input.setCursorCatched(false);
             return true;
         }
@@ -140,7 +144,7 @@ public class CameraController extends InputAdapter {
         float target_y = (float) (rotationCenter.y + distanceToCenter * Math.sin(pitch));
         float target_z = (float) (rotationCenter.z + distanceToCenter * Math.cos(pitch) * Math.cos(yaw));
         tmp1.set(target_x, target_y, target_z);
-        camera.position.lerp(tmp1, Settings.CAM_LERP_FACTOR);
+        camera.position.lerp(tmp1,Settings.CAM_LERP_FACTOR * deltaTime);
 
         // make camera direction point to rotationCenter
         tmp1.set(rotationCenter).sub(camera.position).nor(); // tmp1 = vector to centerPos
