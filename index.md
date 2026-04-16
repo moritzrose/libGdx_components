@@ -2,6 +2,10 @@ Hello and welcome to this collection!
 
 This list of components is still a work in progress - definitely let me know if you have ideas for improvement or spot some mistakes! I am happy to learn.
 
+<h3> List of components </h3>
+
+[3d Game Camera](src/3d_camera/README.md)
+
 <h3>What is this for?</h3>
 
 When I started with libGDX I found that a lot of tutorials where part of a full series like "Make a full 3d game in libGDX". If I wanted to understand everything, I would have to go through every single episode and follow how to make a game, that I did not want to make in the first place.
@@ -21,7 +25,3 @@ If you came here and think, why is there only one chapter - chances are high, I 
 I would be all the more grateful for suggestions on what should become part of this collection in the future!
 
 Feel free to open a new discussion [here](https://github.com/morigamio/libGdx_components/discussions), where you briefly describe your idea or maybe even have some code ready!
-
-<h3> List of components </h3>
-
-[3d Game Camera](src/3d_camera/README.md)
